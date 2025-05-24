@@ -1,118 +1,53 @@
-let menu = document.querySelector('#menu-icon-js');
-let menuicon = document.querySelector('#menu-icon');
-let navbar = document.querySelector('.navbar');
-let navtc = document.querySelector('#nav-tc-js');
+let menuIcon=document.querySelector('#menu-icon');
+let navbar=document.querySelector('.navbar');
 
-menu.onclick = () => {
-	menuicon.classList.toggle('bx-x');
-	navbar.classList.toggle('open');
-	navtc.classList.toggle("nav-touch-close-open");
-}
-
-navtc.onclick = () => {
-	menuicon.classList.toggle('bx-x');
-	navbar.classList.remove('open');
-	navtc.classList.remove('nav-touch-close-open');
-	navtc.classList.remove("nav-tc-z");
-	navtc.classList.remove("nav-LR-TC");
-}
-
-/* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
-var prevScrollpos = window.pageYOffset;
-window.onscroll = function () {
-	var currentScrollPos = window.pageYOffset;
-
-	document.getElementById("header").classList.add('scrolled');
-	if (currentScrollPos === 0) {
-		// console.log("Hello");
-		document.getElementById("header").classList.remove('scrolled');
-	}
-	if (navtc.classList.contains('nav-touch-close-open')) {
-		return;
-	}
-	if (prevScrollpos > currentScrollPos) {
-		document.getElementById("header").style.top = "0";
-	} else {
-		document.getElementById("header").style.top = "-100px";
-	}
-	prevScrollpos = currentScrollPos;
-}
+menuIcon.onclick=()=>{
+    menuIcon.classList.toggle('bx-x');
+    navbar.classList.toggle('active');
+};
 
 
-const contactSection = document.querySelector('.contact-section');
-const formSection = document.querySelector('.form-section');
-const contactSubmitAfter = document.querySelector('.contact-submit-after');
-const csaOK = document.querySelector('.csa-ok');
+let sections=document.querySelectorAll('section');
+let navLinks=document.querySelectorAll('header nav a');
 
+window.onscroll = () => {
+    sections.forEach(sec => {
+        let top = window.scrollY;
+        let offset = sec.offsetTop - 150;
+        let height = sec.offsetHeight;
+        let id = sec.getAttribute('id');
 
-const contactForm = document.querySelector('.contact-form');
-const nameInput = document.getElementById('name');
-const emailInput = document.getElementById('email');
-const messageInput = document.getElementById('message');
-const errorDiv = document.querySelector('.error');
-const emailErrorDiv = document.querySelector('.email-error');
-const contactButton = document.querySelector('.contact-button');
-const contactLoad = document.querySelector('.contact-load');
-const submitText = document.querySelector('.submit-text');
+        if(top >= offset && top < offset + height){
+            navLinks.forEach(links => {
+                links.classList.remove('active');
+                document.querySelector('header nav a[href*=' + id + ']').classList.add('active');
+            });
+        };
 
-if (csaOK) {
-	csaOK.onclick = () => {
-		contactSubmitAfter.classList.remove('show');
-		formSection.classList.remove('hide');
-		contactSection.classList.remove('csa-cs');
-		contactForm.classList.remove('csa-cf');
-		contactButton.classList.remove('loading');
-		contactLoad.classList.remove('show');
-		submitText.classList.remove('hide');
-		// contactSubmitAfter.classList.add('hide');
-	}
-}
+    });
+    let header=document.querySelector('header');
 
-// Function to validate the form
-function validateForm(event) {
-	event.preventDefault(); // Prevent the form from submitting
-	let isValid = true;
-	emailIsValid = true;
-	nameIsValid = true;
-	messageIsValid = true;
+    header.classList.toggle('sticky',window.screenY>100);
+    menuIcon.classList.remove('bx-x');
+    navbar.classList.remove('active');
+};
 
-	// Check if Name field is empty
-	if (nameInput.value.trim() === '') {
-		isValid = false;
-		nameIsValid = false;
-	}
+ScrollReveal({
+    //reset:true,
+    distance:'80px',
+    duration:2000,
+    delay:200
+});
 
-	// Check if Email field is empty or not a valid email address
-	if (emailInput.value.trim() === '' || !isValidEmail(emailInput.value)) {
-		isValid = false;
-		if (emailInput.value.trim() !== '' && !isValidEmail(emailInput.value)) {
-			emailIsValid = false;
-		}
-	}
+ScrollReveal().reveal('.home-content,.heading',{origin:'top'});
+ScrollReveal().reveal('.home-img,.services-container,.portfolio-box,.contact form',{origin:'bottom'});
+ScrollReveal().reveal('.home-content h1,.about-img',{origin:'left'});
+ScrollReveal().reveal('.home-content p,.about-content',{origin:'right'});
 
-	// Check if Message field is empty
-	if (messageInput.value.trim() === '') {
-		isValid = false;
-		messageIsValid = false;
-	}
-
-	if (!isValid) {
-		// Display the error message
-		errorDiv.classList.add('error-show');
-		emailErrorDiv.classList.remove('error-show');
-		if (nameIsValid && messageIsValid && !emailIsValid) {
-			errorDiv.classList.remove('error-show');
-			emailErrorDiv.classList.add('error-show');
-		}
-	} else {
-		// Form is valid, it can be sumbitted now
-		emailErrorDiv.classList.remove('error-show');
-		errorDiv.classList.remove('error-show');
-		contactButton.classList.add('loading');
-		contactLoad.classList.add('show');
-		submitText.classList.add('hide');
-		setTimeout(function () {
-			sendMail();
-		}, 2000);
-	}
-}
+const typed = new Typed('.multiple-text',{
+    strings:['IT Student at XAVIER UNIVERSITY ','Web Developer', 'Video Editor'],
+    typeSpeed:100,
+    backSpeed:100,
+    backDelay:1000,
+    loop:true
+});
